@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hindi Tools Hub</title>
+<style>
+body{margin:0;font-family:Arial;background:#eef3fa;color:#172554}
+header{background:#174ea6;color:white;text-align:center;padding:25px}
+main{max-width:650px;margin:20px auto;padding:12px}
+.card{background:white;padding:18px;border-radius:14px;margin:15px 0;box-shadow:0 2px 8px #ddd}
+textarea,input{width:100%;box-sizing:border-box;padding:12px;margin:8px 0;border:1px solid #bbb;border-radius:8px;font-size:17px}
+button{background:#1d5cba;color:white;border:0;padding:11px;border-radius:7px;margin:3px}
+.keys{display:flex;flex-wrap:wrap;gap:4px}
+</style>
+</head>
+<body>
+<header>
+<h1>Hindi Tools Hub</h1>
+<p>हिंदी टाइपिंग और ऑनलाइन टूल्स</p>
+</header>
+<main>
+<div class="card">
+<h2>हिंदी टाइपिंग टूल</h2>
+<textarea id="txt" rows="5" placeholder="यहाँ लिखें..."></textarea>
+<div class="keys" id="keys"></div>
+<button onclick="add(' ')">Space</button>
+<button onclick="del()">⌫ मिटाएँ</button>
+<button onclick="clearText()">Clear</button>
+<button onclick="copyText()">Copy</button>
+<p id="count">शब्द: 0 | अक्षर: 0</p>
+</div>
+<div class="card">
+<h2>Percentage Calculator</h2>
+<input id="marks" type="number" placeholder="प्राप्त अंक">
+<input id="total" type="number" placeholder="कुल अंक">
+<button onclick="calc()">प्रतिशत निकालें</button>
+<p id="result"></p>
+</div>
+<div class="card">
+<h2>Age Calculator</h2>
+<input id="dob" type="date">
+<button onclick="age()">उम्र निकालें</button>
+<p id="ageResult"></p>
+</div>
+</main>
+<script>
+const letters="अ आ इ ई उ ऊ ए ऐ ओ औ अं अः क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ल व श ष स ह क्ष त्र ज्ञ";
+const area=document.getElementById("txt");
+letters.split(" ").forEach(ch=>{
+let b=document.createElement("button");
+b.textContent=ch;
+b.onclick=()=>add(ch);
+document.getElementById("keys").appendChild(b);
+});
+function add(ch){area.value+=ch;update();}
+function del(){area.value=area.value.slice(0,-1);update();}
+function clearText(){area.value="";update();}
+function update(){
+let t=area.value.trim();
+document.getElementById("count").textContent=
+"शब्द: "+(t?t.split(/\s+/).length:0)+" | अक्षर: "+area.value.length;
+}
+area.addEventListener("input",update);
+function copyText(){
+area.select();
+document.execCommand("copy");
+alert("Text copied!");
+}
+function calc(){
+let m=Number(document.getElementById("marks").value);
+let t=Number(document.getElementById("total").value);
+document.getElementById("result").textContent=
+t>0&&m>=0&&m<=t?"प्रतिशत: "+(m/t*100).toFixed(2)+"%":"सही अंक डालें";
+}
+function age(){
+let d=document.getElementById("dob").value;
+let b=new Date(d+"T00:00:00"),n=new Date();
+if(!d||b>n){document.getElementById("ageResult").textContent="सही जन्मतिथि डालें";return;}
+let y=n.getFullYear()-b.getFullYear(),m=n.getMonth()-b.getMonth();
+if(n.getDate()<b.getDate())m--;
+if(m<0){y--;m+=12;}
+document.getElementById("ageResult").textContent="उम्र: "+y+" साल "+m+" महीने";
+}
+</script>
+</body>
+</html>
